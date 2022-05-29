@@ -42,7 +42,7 @@ router.post(
       const AuthToken = jwt.sign(data, SECRET_KEY);
       res.json({ AuthToken });
     } catch (error) {
-      console.log(error);
+      res.json(error);
     }
   }
 );

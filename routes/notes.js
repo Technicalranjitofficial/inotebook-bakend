@@ -41,7 +41,7 @@ body("description").isLength({min:5}),
     const saveNote=await notes.save();
     res.json(saveNote)
   } catch (error) {
-      return res.status(500).send({error:"Internal Error"});
+      return res.status(500).send({error});
   }
 
 
