@@ -9,7 +9,7 @@ const { route } = require('./routes/auth');
 
 app.use(express.json())
 app.use(cors())
-app.post('/',(req,res)=>{
+app.get('/',(req,res)=>{
     res.json("Connected")
 })
 app.use('/api/auth',require('./routes/auth'))
