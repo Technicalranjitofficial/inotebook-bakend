@@ -14,6 +14,7 @@ router.post(
   // password must be at least 5 chars long
   body("name").isLength({ min: 5 }),
   async (req, res) => {
+    let sucess=false;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
@@ -26,7 +27,8 @@ router.post(
       //checking the user with same email
       let user = await User.findOne({ email: req.body.email });
       if (user) {
-        return res.status(400).json({ err: "Already email exists" });
+        sucess=false;
+        return res.status(400).json({sucess, err: "Already email exists" });
       }
       user = await User.create({
         email: req.body.email,
@@ -40,7 +42,8 @@ router.post(
       };
       //Generatind and sending auth token
       const AuthToken = jwt.sign(data, SECRET_KEY);
-      res.json({ AuthToken });
+      sucess=true;
+      res.json({sucess, AuthToken });
     } catch (error) {
       res.json(error);
     }
@@ -52,6 +55,7 @@ router.post(
   body("email").isEmail(),
   body("password").exists(),
   async (req, res) => {
+    let sucess= false;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
@@ -61,11 +65,13 @@ router.post(
       const { email, password } = req.body;
       const userD = await User.findOne({ email });
       if (!userD) {
-        return res.status(400).json({ error: "Try with correct credientials" });
+        sucess=false;
+        return res.status(400).json({sucess, error: "Try with correct credientials" });
       }
       const passwordComp = await bcrypt.compare(password, userD.password);
       if (!passwordComp) {
-        return res.status(400).json({ error: "Try with correct credientials" });
+        sucess=false;
+        return res.status(400).json({sucess, error: "Try with correct credientials" });
       }
 
       const Data = {
@@ -75,7 +81,8 @@ router.post(
       };
 
       const AUthToken = jwt.sign(Data, SECRET_KEY);
-      res.json({ AUthToken });
+      sucess=true;
+      res.json({sucess, AUthToken });
     } catch (error) {
       console.log(error);
     }
@@ -83,7 +90,7 @@ router.post(
 );
 
 //ROUTE:3 getting the loggedin user details
-router.post("/getuser", getuser, async (req, res) => {
+router.get("/getuser", getuser, async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
