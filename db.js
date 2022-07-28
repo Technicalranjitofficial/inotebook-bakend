@@ -5,7 +5,7 @@ require('dotenv').config();
 const mongoose = require('mongoose');
 const uri=process.env.DATABASE;
 const ldb="mongodb://localhost:27017";
-const db="mongodb+srv://thexhacker:c-B8_LQVn66k*Tz@cluster0.ugev3.mongodb.net/test"
+const db="yourmongodburl"
 const connectToMongose=()=>{
   mongoose.connect(uri, {
 
